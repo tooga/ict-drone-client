@@ -1,0 +1,263 @@
+// bower:scss
+// endbower
+@import "bower_components/Materialize/sass/materialize.scss";
+
+$bg-blue : #303954;
+$bg-black : #333;
+$bg-green : #00991C;
+$bg-red : #BD1010;
+$bg-gray : #8C8C8C;
+$log-orange : #FF9700;
+$log-red : #FF0000;
+$log-gray : #C0C0C0;
+$log-blue : #00CFFF;
+$log-light-green : #00FF16;
+$log-dark-green : #00991C;
+$log-yellow : #EBFF00;
+$log-white : #ffffff;
+
+.bg-blue {
+  background: $bg-blue;
+}
+
+.bg-black {
+  background: $bg-black;
+}
+
+.bg-green {
+  background: $bg-green;
+}
+
+.bg-red {
+  background: $bg-red;
+}
+
+.bg-gray {
+  background: $bg-gray;
+}
+
+.log-orange {
+  color: $log-orange;
+}
+.log-red {
+  color: $log-red;
+}
+.log-gray {
+  color: $log-gray;
+}
+.log-blue {
+  color: $log-blue;
+}
+.log-light-green {
+  color: $log-light-green;
+}
+.log-dark-green {
+  color: $log-dark-green;
+}
+.log-yellow {
+  color: $log-yellow;
+}
+.log-white {
+  color: $log-white;
+}
+.log-dark-green {
+  color: $log-dark-green;
+}
+
+.btn-green {
+  background: $bg-green;
+
+  &:hover {
+    background: $bg-green;
+  }
+}
+
+.btn-gray {
+  background: $bg-gray;
+
+  &:hover {
+    background: $bg-gray;
+  }
+}
+
+.btn-red {
+  background: $bg-red;
+
+  &:hover {
+    background: $bg-red;
+  }
+}
+
+.btn-yellow {
+  background: $log-yellow;
+
+  &:hover {
+    background: $log-yellow;
+  }
+}
+
+.padding-10 {
+  padding: 10px !important;
+}
+
+.padding-v-10 {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.padding-20 {
+  padding: 20px !important;
+}
+
+.padding-v-20 {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+}
+
+.row {
+  margin-bottom: 0;
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: #fafafa;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #333;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#app {
+  height: 100%;
+  overflow: hidden;
+
+  .app-container {
+    height: 100%;
+  }
+}
+
+.map-log-container {
+  height: 100%;
+  overflow: hidden;
+
+  &.half-size {
+    height: 40%;
+  }
+}
+
+#map {
+  width: 50%;
+  height: 100%;
+
+  #map-container {
+    width: 100%;
+    height: 100%;
+    background: #eee;
+  }
+
+}
+
+#log {
+  background: $bg-black;
+  height: 100%;
+  width: 50%;
+  color: $log-white;
+  padding-left: 5px;
+  overflow: auto;
+}
+
+#alertBox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 30px;
+  background: $bg-red;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+
+}
+
+#controlPanel {
+  background: $bg-blue;
+  height: 60%;
+
+  .header {
+    height: 40px;
+    background: $log-blue;
+
+    div {
+      line-height: 40px;
+    }
+  }
+
+  .panel {
+    height: calc(100% - 40px);
+    color: #fff;
+    text-align: center;
+
+    .commands-container {
+
+        .controllers {
+          padding-top: 20px;
+        }
+
+        .keyboard {
+          text-align: center;
+          
+          img {
+            max-height: 100px;
+          }
+        }
+
+        .key img {
+          max-height: 36px;
+        }
+    }
+
+    .imgstream-container {
+      height: 100%;
+      text-align: center;
+
+      div {
+        width: 100%;
+      }
+
+      img {
+        max-height: 100%;
+      }
+    }
+
+    .control-container {
+      height: 100%;
+      padding: 10px;
+
+      .buttons {
+        padding-bottom: 20px;
+
+        div {
+          padding: 5px;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+.browserupgrade {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
