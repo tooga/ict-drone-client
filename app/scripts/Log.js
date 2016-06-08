@@ -12,9 +12,7 @@ var Log = React.createClass({
   	},
 	render: function() {
 		var logData = this.props.logData;
-		console.log(logData);
 		var logs = $.map(logData, function(logObj, index) {
-			console.log(logObj);
 			var message;
 			var logClass;
 			if (logObj.event == "new_detected") {
@@ -35,10 +33,13 @@ var Log = React.createClass({
 			} else if (logObj.event == "released"){
 				message = "DRONE["+logObj.drone_id+"] RELEASED";
 				logClass = "log-yellow";
+			} else {
+				message = logObj.event + " DRONE[" + logObj.drone_id+"]";
+				logClass = "low-white";
 			}
 			return (
 				<div key={index}>
-					<span className="log-orange">[{logObj.timestamp}] </span>
+					<span className="log-orange">[{logObj.created_at_time}] </span>
 					<span className="log-gray">AREA {logObj.ground_station_area_id}: </span>
 					<span className={logClass}>{message}</span>
 				</div>

@@ -21,9 +21,12 @@ var App = React.createClass({
     socket.on("connect", function(data) {
       console.log("connect client");
     });
-    socket.on("logs", this.addLog);
+    socket.on("log", this.addLog);
     socket.on('navdata', this.setNavData);
     socket.on('image', this.setImageData);
+    setInterval(function() {
+      this.addLog();
+    }.bind(this), 5000);
   },
   componentDidUpdate: function(prevProps, prevState) {
   },
@@ -38,8 +41,12 @@ var App = React.createClass({
     })
   },
   addLog: function(data) {
-    console.log("log in client");
-    console.log(data);
+    var log = {"drone_id": 150, "created_at": "15:50", "ground_station_area_id": 1, "event": "new_detected"};
+    var logData = this.state.logData;
+    logData.push(log);
+    this.setState({
+      logData: logData
+    });
   },
   loadLog: function() {
     var self = this;
