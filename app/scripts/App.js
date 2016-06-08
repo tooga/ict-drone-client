@@ -4,18 +4,24 @@ var App = React.createClass({
   // Init initial variables
   getInitialState: function() {
   	return {
-  		logData: {},
-      dataLoaded: false,
+  		logData: [],
+      noDataLoaded: true,
+      allDataLoaded: false,
       gsData: {},
       navData: {},
       droneInControl: false,
       showAlert: false,
       imgData: null,
-      settingsPage: false
+      settingsPage: false,
+
   	}
   },
   componentDidMount: function() {
     this.loadLog();
+    socket.on("connect", function(data) {
+      console.log("connect client");
+    });
+    socket.on("logs", this.addLog);
     socket.on('navdata', this.setNavData);
     socket.on('image', this.setImageData);
   },
@@ -31,19 +37,24 @@ var App = React.createClass({
       imgData: data
     })
   },
+  addLog: function(data) {
+    console.log("log in client");
+    console.log(data);
+  },
   loadLog: function() {
     var self = this;
-    var logUrl = "../data/log.json";
+    var logUrl = baseUrl+"logs";
     $.ajax({
       url: logUrl,
       success: function(data) {
         self.setState({
-          logData: data.log
+          logData: data.logs,
+          noDataLoaded: false
         }, function() {
           this.loadGroundStations();
         });
       },
-      timeout: 10000,
+      timeout: 30000,
       error: function(jqXHR, textStatus, errorThrown) {
           console.log("Error: " + textStatus);
           console.log(jqXHR);
@@ -52,16 +63,16 @@ var App = React.createClass({
   },
   loadGroundStations: function() {
     var self = this;
-    var gsUrl = "http://theshepherd.herokuapp.com/api/ground_stations";
+    var gsUrl = baseUrl + "ground_stations";
     $.ajax({
       url: gsUrl,
       success: function(data) {
         self.setState({
           gsData: data.ground_stations,
-          dataLoaded: true
+          allDataLoaded: true
         });
       },
-      timeout: 10000,
+      timeout: 30000,
       error: function(jqXHR, textStatus, errorThrown) {
           console.log("Error: " + textStatus);
           console.log(jqXHR);
@@ -95,7 +106,7 @@ var App = React.createClass({
   render: function() {
     var droneInControl = this.state.droneInControl;
     var navData = this.state.navData;
-    if (!this.state.dataLoaded) {return(<div></div>)}
+    if (this.state.noDataLoaded) {return(<div></div>)}
     return (
       <div className="app-container">
         <SettingsBtn settingsPage={this.state.settingsPage} toggleSettings={this.toggleSettings}/>

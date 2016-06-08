@@ -9,6 +9,16 @@ var Map = React.createClass({
 	},
 	componentDidMount: function() {
     	var mapDiv = document.getElementById('map-container');
+    	var styles = [
+			{
+			  featureType: "transit",
+			  elementType: "labels",
+			  stylers: [
+			    { visibility: "off" }
+			  ]
+			}
+		];
+		var styledMap = new google.maps.StyledMapType(styles,{name: "Styled Map"});
     	map = new google.maps.Map(mapDiv, {
     		center: {lat: 45.630055, lng: 8.725499},
       		zoom: this.props.halfSize ? 12 : 13,
@@ -23,22 +33,9 @@ var Map = React.createClass({
 			navigationControl: false,
 			disableDoubleClickZoom: true
     	});
+    	map.mapTypes.set('map_style', styledMap);
+  		map.setMapTypeId('map_style');
 		this.setMarkers();
-    	/*new google.maps.Marker({
-		    position: {lat: 45.620055, lng: 8.725499},
-		    map: map,
-		    icon: image,
-		    label: {
-			    text: '2',
-			    color: '#00991C',
-			    fontSize: this.props.halfSize ? '14px' : '16px'
-			 }
-		});*/
-		/*new google.maps.Marker({
-		    position: {lat: 45.630055, lng: 8.725499},
-		    map: map,
-		    label: "1"
-		});*/
 	},
 	setMarkers: function(image) {
 		var image = {
@@ -56,11 +53,11 @@ var Map = React.createClass({
 		      position: {lat: 45.630055, lng: 8.715499},
 		      map: map,
 		      icon: image,
-		      /*label: {
+		      label: {
 			    text: (gs.area_id).toString(),
 			    color: '#00991C',
 			    fontSize: this.props.halfSize ? '14px' : '16px'
-			  }*/
+			  }
 		    });
 		    markers.push(marker);
 		}
