@@ -141,6 +141,25 @@ body {
   }
 }
 
+.settingsBtn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  text-align: center;
+  width: 80px;
+  border-radius: 15px;
+  padding: 5px;
+  font-size: 10px;
+  cursor: pointer;
+
+  i {
+    font-size: 2.4rem;
+  }
+}
+
 .map-log-container {
   height: 100%;
   overflow: hidden;
@@ -159,6 +178,26 @@ body {
     height: 100%;
     background: #eee;
   }
+}
+
+#settingsPage {
+  width: 50%;
+  height: 100%;
+  background: #eee;
+  padding: 20px;
+  position: relative;
+
+  .btn-floating {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: $bg-green;
+  }
+
+  i {
+    cursor: pointer;
+  }
+
 
 }
 
@@ -253,6 +292,48 @@ body {
 
   }
 
+}
+
+.modal {
+  position: absolute;
+
+  .modalBtnContainer {
+    text-align: center;
+    padding: 10px;
+  }
+
+  .modal-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    color: #000;
+  }
+}
+
+.spinner .loader-screen {
+  height: 500px;
+}
+
+.overlay-spinner .loader-screen {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: rgba(0,0,0,0.1);
+}
+
+.loader-screen .preloader-wrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -32px;
+    margin-top: -32px;
+}
+
+.lean-overlay {
+  width: 50%;
 }
 
 .browserupgrade {

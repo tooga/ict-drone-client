@@ -16,11 +16,10 @@
 	/* PRODUCTION */
 	//app.use(express.static(path.join(__dirname,'dist')));
 	server = require("http").Server(app);
-	var io = require('socket.io')(server);
+	var io = require('socket.io').listen(server);
 	server.listen(app.get("port"));
 
 	io.on("connection", function(socket) {
-		console.log("connection");
 
 		socket.on("/drone/move", function(cmd) {
 			drone[cmd.action](cmd.speed);

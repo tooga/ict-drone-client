@@ -1,4 +1,3 @@
-var ajaxErrorCount;
 var isImageLoading = false;
 
 var App = React.createClass({ 
@@ -6,11 +5,13 @@ var App = React.createClass({
   getInitialState: function() {
   	return {
   		logData: {},
-      logLoaded: false,
+      dataLoaded: false,
+      gsData: {},
+      navData: {},
       droneInControl: false,
       showAlert: false,
-      navData: {},
-      imgData: null
+      imgData: null,
+      settingsPage: false
   	}
   },
   componentDidMount: function() {
@@ -36,20 +37,34 @@ var App = React.createClass({
     $.ajax({
       url: logUrl,
       success: function(data) {
-        ajaxErrorCount = 0;
         self.setState({
-          logData: data.log,
-          logLoaded: true
+          logData: data.log
+        }, function() {
+          this.loadGroundStations();
         });
       },
       timeout: 10000,
       error: function(jqXHR, textStatus, errorThrown) {
-        ajaxErrorCount++;
           console.log("Error: " + textStatus);
           console.log(jqXHR);
-          if (ajaxErrorCount < 5) {
-            self.loadEvents();
-          }
+      },
+    })
+  },
+  loadGroundStations: function() {
+    var self = this;
+    var gsUrl = "http://theshepherd.herokuapp.com/api/ground_stations";
+    $.ajax({
+      url: gsUrl,
+      success: function(data) {
+        self.setState({
+          gsData: data.ground_stations,
+          dataLoaded: true
+        });
+      },
+      timeout: 10000,
+      error: function(jqXHR, textStatus, errorThrown) {
+          console.log("Error: " + textStatus);
+          console.log(jqXHR);
       },
     })
   },
@@ -70,15 +85,23 @@ var App = React.createClass({
       showAlert: false
     });
   },
+  toggleSettings: function() {
+    var settingsPage = this.state.settingsPage;
+    this.setState({
+      settingsPage : !settingsPage
+    });
+  },
   // Render function
   render: function() {
     var droneInControl = this.state.droneInControl;
     var navData = this.state.navData;
+    if (!this.state.dataLoaded) {return(<div></div>)}
     return (
       <div className="app-container">
+        <SettingsBtn settingsPage={this.state.settingsPage} toggleSettings={this.toggleSettings}/>
         <div className={"map-log-container " + (droneInControl ? "half-size" : "")}>
-          <Map halfSize={droneInControl}/>
-          {this.state.logLoaded ? <Log alert={this.alert} logData={this.state.logData}/> : null}
+          {this.state.settingsPage ? <SettingsPage loadGsData={this.loadGroundStations} gsData={this.state.gsData}/> : <Map gsData={this.state.gsData} halfSize={droneInControl}/>}
+          <Log alert={this.alert} logData={this.state.logData}/>
         </div>
         {droneInControl ? <ControlPanel imgData={this.state.imgData} navData={this.state.navData}/> : null}
         {this.state.showAlert ? <AlertBox takeControl={this.takeDroneInControl} land={this.landDrone} /> : null}

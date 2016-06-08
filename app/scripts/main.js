@@ -1,4 +1,5 @@
 var socket = io.connect('http://localhost:5000/');  
+var baseUrl = "http://theshepherd.herokuapp.com/api/";
 
 var keymap = {
   87: {

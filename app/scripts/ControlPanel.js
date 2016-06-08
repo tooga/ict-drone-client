@@ -1,15 +1,3 @@
-  /*'controlState', 
-  'flyState', 
-  'batteryPercentage', 
-  'altitudeMeters', 
-  'clockwiseDegrees', 
-  'frontBackDegrees', 
-  'leftRightDegrees', 
-  'xVelocity', 
-  'yVelocity', 
-  'zVelocity',
-  'flying' (0/1)*/
-
 
 var ControlPanel = React.createClass({
 	componentDidMount: function() {
