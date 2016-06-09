@@ -68,16 +68,18 @@ var Map = React.createClass({
 		}
 		markers = [];
 	},
-	componentDidUpdate: function() {
-		google.maps.event.trigger(map, "resize");
-		this.clearMarkers();
-		map.setCenter({lat: 45.630055, lng: 8.725499});
-		if (this.props.halfSize) {
-			map.setZoom(12);
-		} else {
-			map.setZoom(13);
+	componentDidUpdate: function(prevProps, prevState) {
+		if (this.props.halfSize != prevProps.halfSize) {
+			google.maps.event.trigger(map, "resize");
+			this.clearMarkers();
+			map.setCenter({lat: 45.630055, lng: 8.725499});
+			if (this.props.halfSize) {
+				map.setZoom(12);
+			} else {
+				map.setZoom(13);
+			}
+			this.setMarkers();
 		}
-		this.setMarkers();
 	},
 	render: function() {
 		return (

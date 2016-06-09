@@ -15,16 +15,22 @@
 	/* PRODUCTION */
 	//app.use(express.static(path.join(__dirname,'dist')));
 	server = require("http").Server(app);
-	var io = require('socket.io').listen(server);
+	var io = require('socket.io')(server);
 	server.listen(app.get("port"));
 
-	// var redis = require('redis').createClient(REDIS_VAR.url);
+	var redis = require('redis').createClient(REDIS_VAR.url);
 
-	// redis.on('connect'     , log('connect'));
-	// redis.on('ready'       , log('ready'));
-	// redis.on('reconnecting', log('reconnecting'));
-	// redis.on('error'       , log('error'));
-	// redis.on('end'         , log('end'));
+	redis.on('connect'     , log('connect'));
+	redis.on('ready'       , log('ready'));
+	redis.on('reconnecting', log('reconnecting'));
+	redis.on('error'       , log('error'));
+	redis.on('end'         , log('end'));
+
+	redis.on('message', function(channel, message){
+    	console.log("log received");
+    	console.log(message);
+		io.emit('log', message);
+	});
 
 	function log(type) {
 	    return function() {
@@ -32,7 +38,7 @@
 	    }
 	}
 
-	// redis.subscribe('logs.create');
+	redis.subscribe('logs.create');
 
 	var imageFrame = null;
 
@@ -54,12 +60,6 @@
 	    	imageFrame = imageData.frame;
 	    	io.emit("image", imageData.src);
 	    })
-
-	 //   	redis.on('message', function(channel, message){
-	 //    	console.log("log received");
-	 //    	console.log(message);
-		// 	io.emit('log', message);
-		// });
 
 	});
 

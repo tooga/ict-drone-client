@@ -5,28 +5,23 @@ var App = React.createClass({
   getInitialState: function() {
   	return {
   		logData: [],
-      noDataLoaded: true,
       allDataLoaded: false,
       gsData: {},
       navData: {},
       droneInControl: false,
       showAlert: false,
+      alertedLog: {},
       imgData: null,
-      settingsPage: false,
-
+      settingsPage: false
   	}
   },
   componentDidMount: function() {
-    this.loadLog();
-    socket.on("connect", function(data) {
-      console.log("connect client");
-    });
+    this.loadLogs();
     socket.on("log", this.addLog);
     socket.on('navdata', this.setNavData);
     socket.on('image', this.setImageData);
-    setInterval(function() {
-      this.addLog();
-    }.bind(this), 5000);
+    var log = '{"event":"new_detected","drone_id":1,"drone_mac_address":"2D:2D:2D:2D:2D:2D","ground_station_area_id":1,"created_at_time":"20:52"}';
+    this.addLog(log);
   },
   componentDidUpdate: function(prevProps, prevState) {
   },
@@ -40,15 +35,27 @@ var App = React.createClass({
       imgData: data
     })
   },
-  addLog: function(data) {
-    var log = {"drone_id": 150, "created_at": "15:50", "ground_station_area_id": 1, "event": "new_detected"};
+  addLog: function(newLog) {
+    var log = JSON.parse(newLog);
     var logData = this.state.logData;
     logData.push(log);
-    this.setState({
-      logData: logData
-    });
+    if (log.event == "new_detected" && !this.state.showAlert) {
+      this.setState({
+        logData: logData,
+        showAlert : true,
+        alertedLog: log
+      });
+    } else if (log.event == "new_detected" && (this.state.showAlert || this.state.droneInControl)) {
+      // Is this done already in server side? If one controlled, 
+      // land it automatically and send just a log notification to client
+      //this.landDrone("drone_in_control", log);
+    } else {
+      this.setState({
+        logData: logData
+      });
+    }
   },
-  loadLog: function() {
+  loadLogs: function() {
     var self = this;
     var logUrl = baseUrl+"logs";
     $.ajax({
@@ -86,21 +93,29 @@ var App = React.createClass({
       },
     })
   },
-  alert: function() {
-    this.setState({
-      showAlert: true
-    });
-  },
   takeDroneInControl: function() {
+    var log = this.state.alertedLog;
+    log.event = "user_control";
     this.setState({
       droneInControl: true,
       showAlert: false
+    }, function() {
+      this.postLog(log);
     });
   },
-  landDrone: function() {
+  landDrone: function(user_control) {
+    var log = this.state.alertedLog;
+    if (user_control) {
+      log.event = "land_user";
+    } else {
+      log.event = "land_automatic";
+    }
     this.setState({
       droneInControl: false,
-      showAlert: false
+      showAlert: false,
+      alertedLog: {}
+    }, function() {
+      this.postLog(log);
     });
   },
   toggleSettings: function() {
@@ -109,11 +124,28 @@ var App = React.createClass({
       settingsPage : !settingsPage
     });
   },
+  postLog: function(log) {
+    var logData = {"log": {"event": log.event, "drone_mac_address": log.drone_mac_address}};
+    var self = this;
+    var logUrl = baseUrl+"ground_stations/"+log.ground_station_area_id+"/logs";
+    $.ajax({
+      type: "POST",
+      url: logUrl,
+      data: logData,
+      success: function(data) {
+      },
+      timeout: 30000,
+      error: function(jqXHR, textStatus, errorThrown) {
+          console.log("Error: " + textStatus);
+          console.log(jqXHR);
+      },
+    })
+  },
   // Render function
   render: function() {
     var droneInControl = this.state.droneInControl;
     var navData = this.state.navData;
-    if (this.state.noDataLoaded) {return(<div></div>)}
+    if (!this.state.allDataLoaded) {return(<div></div>)}
     return (
       <div className="app-container">
         <SettingsBtn settingsPage={this.state.settingsPage} toggleSettings={this.toggleSettings}/>
@@ -121,8 +153,8 @@ var App = React.createClass({
           {this.state.settingsPage ? <SettingsPage loadGsData={this.loadGroundStations} gsData={this.state.gsData}/> : <Map gsData={this.state.gsData} halfSize={droneInControl}/>}
           <Log alert={this.alert} logData={this.state.logData}/>
         </div>
-        {droneInControl ? <ControlPanel imgData={this.state.imgData} navData={this.state.navData}/> : null}
-        {this.state.showAlert ? <AlertBox takeControl={this.takeDroneInControl} land={this.landDrone} /> : null}
+        {droneInControl ? <ControlPanel imgData={this.state.imgData} navData={this.state.navData} landDrone={this.landDrone} alertedLog={this.state.alertedLog}/> : null}
+        {this.state.showAlert && !droneInControl ? <AlertBox takeControl={this.takeDroneInControl} landDrone={this.landDrone} alertedLog={this.state.alertedLog}/> : null}
       </div>
     );
   }

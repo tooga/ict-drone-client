@@ -214,10 +214,18 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  padding: 30px;
+  padding: 30px 50px;
   background: $bg-red;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+
+  h4 {
+    margin-top: 0;
+  }
+
+  .action {
+    padding: 10px 0;
+  }
 
 }
 

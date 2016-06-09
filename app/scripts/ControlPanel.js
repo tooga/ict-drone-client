@@ -32,11 +32,9 @@ var ControlPanel = React.createClass({
 		});
 		return;
 	},
-	releaseDrone: function() {
+	landDrone: function() {
 		console.log("release");
-		socket.emit("/drone/drone", {
-			action: 'stop'
-		});
+		this.props.landDrone(true);
 		return;
 	},
 	render: function() {
@@ -54,7 +52,7 @@ var ControlPanel = React.createClass({
 		return (
 			<div id="controlPanel">
 				<div className="row header">
-					<div className="col s12 bg-green center white-text">CONTROLLING DRONE[135] IN AREA 4</div>
+					<div className="col s12 bg-green center white-text">CONTROLLING DRONE[{this.props.alertedLog.drone_id}] IN AREA {this.props.alertedLog.ground_station_area_id}</div>
 				</div>
 				<div className="row panel">
 					<div className="col s3 commands-container padding-10">
@@ -100,7 +98,7 @@ var ControlPanel = React.createClass({
 					<div className="col s3 control-container">
 						<div>
 							<div className="row buttons">
-								<div className="col s12"><a className="waves-effect waves-light btn btn-yellow black-text" onClick={this.releaseDrone}>RELEASE DRONE</a></div>
+								<div className="col s12"><a className="waves-effect waves-light btn btn-yellow black-text" onClick={this.landDrone}>LAND & RELEASE DRONE</a></div>
 								<div className="col s12"><a className="waves-effect waves-light btn btn-red black-text" onClick={this.recoverFromEmergency}>RECOVER FROM EMERGENCY</a></div>
 							</div>
 							<div className="row status center">

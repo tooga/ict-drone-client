@@ -27,11 +27,11 @@ var Log = React.createClass({
 			} else if (logObj.event == "user_control"){
 				message = "USER CONTROLLING DRONE["+logObj.drone_id+"]";
 				logClass = "log-blue";
-			} else if (logObj.event == "landing"){
+			} else if (logObj.event == "land_automatic"){
 				message = "NO USER ACTION, LANDING DRONE["+logObj.drone_id+"]";
 				logClass = "log-blue";
-			} else if (logObj.event == "released"){
-				message = "DRONE["+logObj.drone_id+"] RELEASED";
+			} else if (logObj.event == "land_user"){
+				message = "LANDING DRONE["+logObj.drone_id+"]";
 				logClass = "log-yellow";
 			} else {
 				message = logObj.event + " DRONE[" + logObj.drone_id+"]";
@@ -46,7 +46,7 @@ var Log = React.createClass({
 			)
 		})
 		return (
-			<div id="log" onClick={this.props.alert} className="left">
+			<div id="log" className="left">
 				{logs}
 			</div>
 
