@@ -1,7 +1,7 @@
 var AlertBox = React.createClass({
 	getInitialState: function() {
 		return {
-			count: 60
+			count: 30
 		}
 	},
 	componentDidMount: function() {

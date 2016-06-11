@@ -21,7 +21,9 @@ var App = React.createClass({
     socket.on('navdata', this.setNavData);
     socket.on('image', this.setImageData);
     var log = '{"event":"new_detected","drone_id":1,"drone_mac_address":"2D:2D:2D:2D:2D:2D","ground_station_area_id":1,"created_at_time":"20:52"}';
-    this.addLog(log);
+    setTimeout(function() {
+      this.addLog(log);
+    }.bind(this), 6000);
   },
   componentDidUpdate: function(prevProps, prevState) {
   },
