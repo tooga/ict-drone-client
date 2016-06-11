@@ -4,36 +4,26 @@
 	var express = require('express');
 	var path = require("path");
 	var drone = require("ar-drone").createClient();
-	var REDIS_VAR = require("./redis_var.js");
 
 	// Set express server
 	var app = express();
 	app.set('port', process.env.PORT || 5000);
-	app.use(express.static(path.join(__dirname,'.tmp')));
-	app.use(express.static(path.join(__dirname,'app')));
-	app.use("/bower_components", express.static(path.join(__dirname, 'bower_components')));
+	app.use(express.static(path.join(__dirname,'public')));
 	server = require("http").Server(app);
 	var io = require('socket.io')(server);
 	server.listen(app.get("port"));
 
-	var redis = require('redis').createClient(REDIS_VAR.url);
+	var redis = require('redis').createClient(process.env.REDIS);
 
 	redis.on('message', function(channel, message){
 		io.emit('log', message);
 	});
-
-	function log(type) {
-	    return function() {
-	        console.log(type, arguments);
-	    }
-	}
 
 	redis.subscribe('logs.create');
 
 	var imageFrame = null;
 
 	io.on("connection", function(socket) {
-		console.log("connection");
 
 		socket.on("/drone/move", function(cmd) {
 			io.emit("/drone/move", cmd)
@@ -55,7 +45,7 @@
 
     app.get('/image/:id', function (req, res) {
         res.writeHead(200, { "Content-Type": "image/png" });
-        return res.end(imageFrame, "binary"); // return ?
+        return res.end(imageFrame, "binary");
     });
 
 }).call(this);

@@ -1,0 +1,15 @@
+{
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines":{
+    "node": ">=4"
+  },
+  "dependencies": {
+    "ar-drone": "^0.3.1",
+    "express": "^4.13.4",
+    "redis": "^2.6.1",
+    "socket.io": "^1.4.6"
+  }
+}
