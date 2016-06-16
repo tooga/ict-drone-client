@@ -21,12 +21,6 @@
 		io.emit('log', message);
 	});
 
-	function log(type) {
-	    return function() {
-	        console.log(type, arguments);
-	    }
-	}
-
 	redis.subscribe('logs.create');
 
 	var imageFrame = null;
@@ -57,7 +51,7 @@
 
     app.get('/image/:id', function (req, res) {
         res.writeHead(200, { "Content-Type": "image/png" });
-        return res.end(imageFrame, "binary"); // return ?
+        return res.end(imageFrame, "binary");
     });
 
 }).call(this);

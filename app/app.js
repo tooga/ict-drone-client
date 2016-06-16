@@ -3,7 +3,6 @@
 	var server;
 	var express = require('express');
 	var path = require("path");
-	var drone = require("ar-drone").createClient();
 
 	// Set express server
 	var app = express();
@@ -13,7 +12,7 @@
 	var io = require('socket.io')(server);
 	server.listen(app.get("port"));
 
-	var redis = require('redis').createClient(process.env.REDIS);
+	var redis = require('redis').createClient(REDIS_VAR.url);
 
 	redis.on('message', function(channel, message){
 		io.emit('log', message);
@@ -24,6 +23,10 @@
 	var imageFrame = null;
 
 	io.on("connection", function(socket) {
+
+		socket.on("drone_detected", function() {
+			io.emit("drone_detected");
+		});
 
 		socket.on("/drone/move", function(cmd) {
 			io.emit("/drone/move", cmd)
