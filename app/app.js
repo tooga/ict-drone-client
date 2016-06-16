@@ -12,7 +12,7 @@
 	var io = require('socket.io')(server);
 	server.listen(app.get("port"));
 
-	var redis = require('redis').createClient(REDIS_VAR.url);
+	var redis = require('redis').createClient(process.env.REDIS);
 
 	redis.on('message', function(channel, message){
 		io.emit('log', message);
