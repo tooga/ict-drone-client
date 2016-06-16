@@ -19,12 +19,12 @@ var Log = React.createClass({
 				message = "DRONE["+logObj.drone_id+"] DETECTED";
 				logClass = "log-red";
 			} else if (logObj.event == "taking_control"){
-				message = "TAKING CONTROL OF DRONE["+logObj.drone_id+"]";
+				message = "DRONE["+logObj.drone_id+"] IN CONTROL. WAITING FOR USER ACTION...";
 				logClass = "log-white";
-			} else if (logObj.event == "in_control"){
+			}/* else if (logObj.event == "in_control"){
 				message = "DRONE["+logObj.droneId+"] IN CONTROL"; 
 				logClass = "log-light-green";
-			} else if (logObj.event == "user_control"){
+			} */else if (logObj.event == "user_control"){
 				message = "USER CONTROLLING DRONE["+logObj.drone_id+"]";
 				logClass = "log-blue";
 			} else if (logObj.event == "land_automatic"){

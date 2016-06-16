@@ -17,7 +17,7 @@ var App = React.createClass({
   },
   componentDidMount: function() {
     this.loadLogs();
-    socket.on("drone_detected", this.droneDetected);
+    //socket.on("drone_detected", this.droneDetected);
     socket.on("log", this.addLog);
     socket.on('navdata', this.setNavData);
     socket.on('image', this.setImageData);
@@ -25,7 +25,7 @@ var App = React.createClass({
   componentDidUpdate: function(prevProps, prevState) {
   },
   droneDetected: function() {
-    var log = '{"event":"new_detected","drone_id":1,"drone_mac_address":"2D:2D:2D:2D:2D:2D","ground_station_area_id":1,"created_at_time":"20:52"}';
+    var log = '{"event":"taking_control","drone_id":1,"drone_mac_address":"2D:2D:2D:2D:2D:2D","ground_station_area_id":1,"created_at_time":"20:52"}';
     this.addLog(log);
   },
   setNavData: function(data) {
@@ -42,13 +42,13 @@ var App = React.createClass({
     var log = JSON.parse(newLog);
     var logData = this.state.logData;
     logData.push(log);
-    if (log.event == "new_detected" && !this.state.showAlert) {
+    if (log.event == "taking_control" && !this.state.showAlert) {
       this.setState({
         logData: logData,
         showAlert : true,
         alertedLog: log
       });
-    } else if (log.event == "new_detected" && (this.state.showAlert || this.state.droneInControl)) {
+    } else if (log.event == "taking_control" && (this.state.showAlert || this.state.droneInControl)) {
       // Is this done already in server side? If one controlled, 
       // land it automatically and send just a log notification to client
       // this.landDrone("drone_in_control");
@@ -57,6 +57,11 @@ var App = React.createClass({
         logData: logData
       });
     }
+  },
+  alert: function() {
+    this.setState({
+      showAlert: true
+    })
   },
   loadLogs: function() {
     var self = this;
@@ -155,10 +160,10 @@ var App = React.createClass({
     if (!this.state.allDataLoaded) {return(<div></div>)}
     return (
       <div className="app-container">
-        <SettingsBtn settingsPage={this.state.settingsPage} toggleSettings={this.toggleSettings}/>
+        <SettingsBtn settingsPage={this.state.settingsPage} toggleSettings={this.toggleSettings} alert={this.alert}/>
         <div className={"map-log-container " + (droneInControl ? "half-size" : "")}>
           {this.state.settingsPage ? <SettingsPage loadGsData={this.loadGroundStations} gsData={this.state.gsData}/> : <Map gsData={this.state.gsData} halfSize={droneInControl}/>}
-          <Log alert={this.alert} logData={this.state.logData}/>
+          <Log logData={this.state.logData}/>
         </div>
         {droneInControl ? <ControlPanel imgData={this.state.imgData} navData={this.state.navData} landDrone={this.landDrone} alertedLog={this.state.alertedLog}/> : null}
         {this.state.showAlert && !droneInControl ? <AlertBox takeControl={this.takeDroneInControl} landDrone={this.landDrone} alertedLog={this.state.alertedLog}/> : null}

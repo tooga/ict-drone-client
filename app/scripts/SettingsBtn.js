@@ -1,6 +1,7 @@
 var SettingsBtn = React.createClass({
 	toggleSettings: function() {
 		this.props.toggleSettings();
+		this.props.alert();
 	},
 	render: function() {
 		return (
