@@ -17,15 +17,16 @@ var App = React.createClass({
   },
   componentDidMount: function() {
     this.loadLogs();
+    socket.on("drone_detected", this.droneDetected);
     socket.on("log", this.addLog);
     socket.on('navdata', this.setNavData);
     socket.on('image', this.setImageData);
-    var log = '{"event":"new_detected","drone_id":1,"drone_mac_address":"2D:2D:2D:2D:2D:2D","ground_station_area_id":1,"created_at_time":"20:52"}';
-    setTimeout(function() {
-      this.addLog(log);
-    }.bind(this), 6000);
   },
   componentDidUpdate: function(prevProps, prevState) {
+  },
+  droneDetected: function() {
+    var log = '{"event":"new_detected","drone_id":1,"drone_mac_address":"2D:2D:2D:2D:2D:2D","ground_station_area_id":1,"created_at_time":"20:52"}';
+    this.addLog(log);
   },
   setNavData: function(data) {
     this.setState({
@@ -50,7 +51,7 @@ var App = React.createClass({
     } else if (log.event == "new_detected" && (this.state.showAlert || this.state.droneInControl)) {
       // Is this done already in server side? If one controlled, 
       // land it automatically and send just a log notification to client
-      //this.landDrone("drone_in_control", log);
+      // this.landDrone("drone_in_control");
     } else {
       this.setState({
         logData: logData
@@ -105,8 +106,12 @@ var App = React.createClass({
       this.postLog(log);
     });
   },
-  landDrone: function(user_control) {
-    var log = this.state.alertedLog;
+  landDrone: function(user_control, logData) {
+    socket.emit("/drone/drone", {
+      action: 'land',
+      release: true
+    });
+    var log = logData ? logData : this.state.alertedLog;
     if (user_control) {
       log.event = "land_user";
     } else {

@@ -12,6 +12,7 @@ var ControlPanel = React.createClass({
 			}
 			event.preventDefault();
 			speed = speed >= 1 ? 1 : speed + 0.2 / (1 - (speed/2));
+			//speed = speed >= 1 ? 1 : speed + 0.08 / (1 - speed);
 			eventData = keymap[event.keyCode];
 			return socket.emit("/drone/" + eventData.event, {
 			  action: eventData.action,
