@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost:5000/');  
+var socket = io.connect('http://shepherd-client.herokuapp.com/');  
 var baseUrl = "http://theshepherd.herokuapp.com/api/";
 
 var keymap = {
