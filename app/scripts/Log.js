@@ -16,10 +16,13 @@ var Log = React.createClass({
 			var message;
 			var logClass;
 			if (logObj.event == "new_detected") {
-				message = "DRONE["+logObj.drone_id+"] DETECTED";
+				message = "NEW DRONE["+logObj.drone_id+"] DETECTED";
 				logClass = "log-red";
+			} else if (logObj.event == "detected") {
+				message = "DRONE["+logObj.drone_id+"] DETECTED";
+				logClass = "log-yellow";
 			} else if (logObj.event == "taking_control"){
-				message = "DRONE["+logObj.drone_id+"] IN CONTROL. WAITING FOR USER ACTION...";
+				message = "DRONE["+logObj.drone_id+"] IN CONTROL...WAITING FOR USER ACTION...";
 				logClass = "log-white";
 			}/* else if (logObj.event == "in_control"){
 				message = "DRONE["+logObj.droneId+"] IN CONTROL"; 
@@ -29,10 +32,16 @@ var Log = React.createClass({
 				logClass = "log-blue";
 			} else if (logObj.event == "land_automatic"){
 				message = "NO USER ACTION, LANDING DRONE["+logObj.drone_id+"]";
-				logClass = "log-blue";
+				logClass = "log-orange";
 			} else if (logObj.event == "land_user"){
 				message = "LANDING DRONE["+logObj.drone_id+"]";
-				logClass = "log-yellow";
+				logClass = "log-orange";
+			} else if (logObj.event == "controlled") {
+				message = "DRONE RELEASED FROM CONTROL";
+				logClass = "log-light-green";
+			} else if (logObj.event == "ground_station_started") {
+				message = "GROUND STATION STARTED";
+				logClass = "log-white";
 			} else {
 				message = logObj.event + " DRONE[" + logObj.drone_id+"]";
 				logClass = "low-white";

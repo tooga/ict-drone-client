@@ -58,17 +58,13 @@ var App = React.createClass({
       });
     }
   },
-  alert: function() {
-    this.setState({
-      showAlert: true
-    })
-  },
   loadLogs: function() {
     var self = this;
     var logUrl = baseUrl+"logs";
     $.ajax({
       url: logUrl,
       success: function(data) {
+        data.logs.reverse();
         self.setState({
           logData: data.logs,
           noDataLoaded: false
@@ -160,7 +156,7 @@ var App = React.createClass({
     if (!this.state.allDataLoaded) {return(<div></div>)}
     return (
       <div className="app-container">
-        <SettingsBtn settingsPage={this.state.settingsPage} toggleSettings={this.toggleSettings} alert={this.alert}/>
+        <SettingsBtn settingsPage={this.state.settingsPage} toggleSettings={this.toggleSettings}/>
         <div className={"map-log-container " + (droneInControl ? "half-size" : "")}>
           {this.state.settingsPage ? <SettingsPage loadGsData={this.loadGroundStations} gsData={this.state.gsData}/> : <Map gsData={this.state.gsData} halfSize={droneInControl}/>}
           <Log logData={this.state.logData}/>

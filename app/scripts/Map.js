@@ -16,12 +16,19 @@ var Map = React.createClass({
 			  stylers: [
 			    { visibility: "off" }
 			  ]
-			}
+			},
+			{
+			  featureType: "poi.business",
+			  elementType: "labels",
+			  stylers: [
+			    { visibility: "off" }
+			  ]
+			},
 		];
 		var styledMap = new google.maps.StyledMapType(styles,{name: "Styled Map"});
     	map = new google.maps.Map(mapDiv, {
-    		center: {lat: 45.630055, lng: 8.725499},
-      		zoom: this.props.halfSize ? 12 : 13,
+    		center: {lat: 46.022443, lng: 11.126918},
+      		zoom: this.props.halfSize ? 14 : 15,
       		zoomControl: false,
 			mapTypeControl: false,
 			scaleControl: false,
@@ -50,7 +57,7 @@ var Map = React.createClass({
 		for (var i in this.props.gsData) {
 			var gs = this.props.gsData[i];
 		    var marker = new google.maps.Marker({
-		      position: {lat: 45.630055, lng: 8.715499},
+		      position: {lat: parseFloat(gs.lat), lng: parseFloat(gs.long)},
 		      map: map,
 		      icon: image,
 		      label: {
@@ -72,11 +79,11 @@ var Map = React.createClass({
 		if (this.props.halfSize != prevProps.halfSize) {
 			google.maps.event.trigger(map, "resize");
 			this.clearMarkers();
-			map.setCenter({lat: 45.630055, lng: 8.725499});
+			map.setCenter({lat: 46.022443, lng: 11.126918});
 			if (this.props.halfSize) {
-				map.setZoom(12);
+				map.setZoom(14);
 			} else {
-				map.setZoom(13);
+				map.setZoom(15);
 			}
 			this.setMarkers();
 		}
