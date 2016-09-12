@@ -12,6 +12,9 @@ The final **ShepherD** product is an integration of the App, the Ground Station 
   git@github.com:tooga/ict-drone-client.git # download the repository
   cd ict-drone-client
   npm install # install dependencies
-  node app.js # start node server
+  bower install # install dependencies
+  gulp serve # start node server
 ```
 The previous code will have the Client running. The ShepherD App needs to be running already for the Client to work properly.
+
+We assume that your computer already has the configuration needed to run node js applications and thus have **nodejs** and **npm** previously installed. You also will need to install **bower** and **gulp** via npm.
